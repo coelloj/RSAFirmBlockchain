@@ -200,11 +200,12 @@ def primeGenerator(n):
 def main():
     flagOp = True
     rsa = RSA()
-    # Genero una lista de primos desde 2 hasta 500
-    primes = primeGenerator(500)
+    # Genero una lista de primos desde 2 hasta 300
+    # (mientras el numero primo sea mas grande, se necesitara mas computo para firmar y verificar)
+    primes = primeGenerator(300)
 
     # Se elige dos primo de la lista al azar
-    position = randrange(40, len(primes))
+    position = randrange(20, len(primes))
     primeA = primes[position] 
     primeB = primes[position-1]
 
