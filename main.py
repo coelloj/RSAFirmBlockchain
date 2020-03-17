@@ -167,7 +167,7 @@ def check(rsa):
         fKey = open(name,"r") 
         line = fKey.read().split(",")
 
-        # Se lee la clave privada
+        # Se lee la clave privada 
         modKey = int(line[0])
         publKey = int(line[1])
         fKey.close()
@@ -187,6 +187,7 @@ def check(rsa):
         print("No Coinciden las firmas")
         return False
 
+# Metodo generador de primos desde 2 hasta N
 def primeGenerater(n):
     primes = list()
     primes.append(2)
@@ -196,6 +197,7 @@ def primeGenerater(n):
                 primes.append(num)
     return primes
 
+# main
 def main():
     flagOp = True
     rsa = RSA()
@@ -205,10 +207,10 @@ def main():
     primeB = primes[position-1]
     while flagOp:
         op = mainMenu()
-        if op == 1: 
+        if op == 1: # Opcion Generar clave publica y privada
             system("cls")
             keys(rsa, primeA, primeB)
-        elif op == 2:        
+        elif op == 2: # Opcion Cifrado de mensaje y se genera la firma  
             system("cls")
             flag = sign(rsa) 
             if flag:
@@ -216,7 +218,7 @@ def main():
             else:
                 print("No Firmado") 
             system("pause")
-        elif op == 3:
+        elif op == 3: # Opcion Descifrado de Firma 
             system("cls")
             flag = check(rsa) 
             if flag:
