@@ -208,7 +208,7 @@ def main():
     position = randrange(20, len(primes))
     primeA = primes[position] 
     primeB = primes[position-1]
-
+ 
     while flagOp:
         op = mainMenu()
         if op == 1: # Opcion Generar clave publica y privada
@@ -232,7 +232,6 @@ def main():
             system("pause")
         elif op == 0:
             flagOp = False
-
 
 if __name__=="__main__":
     main()
