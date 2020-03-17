@@ -188,23 +188,26 @@ def check(rsa):
         return False
 
 # Metodo generador de primos desde 2 hasta N
-def primeGenerater(n):
+def primeGenerator(n):
     primes = list()
     primes.append(2)
     for num in range(3, n+1, 2):
-        if all(num % i != 0 
-            for i in range(2, int(num**.5 ) + 1)):
-                primes.append(num)
+        if all(num % i != 0 for i in range(2, int(num**.5 ) + 1)):
+            primes.append(num)
     return primes
 
 # main
 def main():
     flagOp = True
     rsa = RSA()
-    primes = primeGenerater(100)
-    position = randrange(50, len(primes))
-    primeA = primes[position]
+    # Genero una lista de primos desde 2 hasta 500
+    primes = primeGenerator(500)
+
+    # Se elige dos primo de la lista al azar
+    position = randrange(40, len(primes))
+    primeA = primes[position] 
     primeB = primes[position-1]
+
     while flagOp:
         op = mainMenu()
         if op == 1: # Opcion Generar clave publica y privada
