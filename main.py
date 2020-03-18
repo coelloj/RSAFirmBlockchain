@@ -1,7 +1,8 @@
-from os import system, path
+import os
 from hashlib import sha256
 from random import randrange
 from math import sqrt
+pause = 0 # Var auxiliar
 
 class RSA():
     # Algoritmo de Maximo comun divisor de Euclides "EXTENDIDO" (Tomado de Wikipedia)
@@ -62,9 +63,9 @@ class RSA():
         return [module, publicKey, privateKey]
 
 # Metodo para un menu de usuario en consola
-def mainMenu():
+def mainMenu(clearCommandConsole,):
     while True:
-        system("cls")
+        os.system(clearCommandConsole)
         op = 0
         print("*******Firma Electronica*******")
         print("* 1. Generar Claves           *")
@@ -78,11 +79,11 @@ def mainMenu():
         elif(op == 1 or op == 2 or op == 3):
             return op
         else:
-            print("opcion invalida!")
-            system("pause")
+            pause = input("opcion invalida!")
+            
 
-def keys(rsa, p, q):
-    key = input("Ingrese el nombre de la llave: ")
+def keys(rsa, p, q,):
+    key = input("Ingrese el nombre para las llaves: ")
     fPrivate = open(key+".private.key", "w")       
     fPublic = open(key+".public.key", "w")       
     keys = rsa.calcKeys(p, q)
@@ -96,13 +97,12 @@ def keys(rsa, p, q):
     print("Llaves Generadas")
     print("Clave Publica (modulo, exponente): ", keys[0], keys[1])
     print("Clave Privada (modulo, exponente): ", keys[0], keys[2])
-    system("pause")
 
 def sign(rsa):
     flag = True
     name = input("Ingrese el nombre del documento a firmar: ")
     name = name + ".txt"
-    if path.isfile(name):
+    if os.path.isfile(name):
         # Se abren los ficheros que contiene el mensaje en claro 
         fDocument = open(name,"r") 
         # Se lee el contenido del mensaje
@@ -112,9 +112,9 @@ def sign(rsa):
         print("El documento no existe.")
         return False
 
-    name = input("Ingrese el nombre de la llave: ")
+    name = input("Ingrese el nombre de la llave publica: ")
     name = name + ".public.key"
-    if path.isfile(name):
+    if os.path.isfile(name):
         # Se abren los ficheros que contiene la llave
         fKey = open(name,"r") 
         line = fKey.read().split(",")
@@ -145,7 +145,7 @@ def check(rsa):
     name = input("Ingrese el nombre del documento a verificar: ")
     firm = name + ".firm"
     name = name + ".txt"
-    if path.isfile(name) and path.isfile(firm):
+    if os.path.isfile(name) and os.path.isfile(firm):
         # Se abren los ficheros que contiene el mensaje en claro 
         fDocument = open(name,"r") 
         # Se lee el contenido del mensaje
@@ -160,9 +160,9 @@ def check(rsa):
         print("El documento o la firma no existe.")
         return False
 
-    name = input("Ingrese el nombre de la llave: ")
+    name = input("Ingrese el nombre de la llave privada: ")
     name = name + ".private.key"
-    if path.isfile(name):
+    if os.path.isfile(name):
         # Se abren los ficheros que contiene la llave
         fKey = open(name,"r") 
         line = fKey.read().split(",")
@@ -181,10 +181,10 @@ def check(rsa):
     decryptedFirm = rsa.decrypt(firm, publKey, modKey)
 
     if msgFirm == decryptedFirm:
-        print("El Mensaje es Autentico")
+        print("Firma Aceptada")
         return True
     else:
-        print("No Coinciden las firmas")
+        print("Firma Rechazada")
         return False
 
 # Metodo generador de primos desde 2 hasta N
@@ -199,6 +199,7 @@ def primeGenerator(n):
 # main
 def main():
     flagOp = True
+    clearCommandConsole = ''
     rsa = RSA()
     # Genero una lista de primos desde 2 hasta 300
     # (mientras el numero primo sea mas grande, se necesitara mas computo para firmar y verificar)
@@ -208,28 +209,35 @@ def main():
     position = randrange(20, len(primes))
     primeA = primes[position] 
     primeB = primes[position-1]
- 
+    
+    # directivas para limpiar la consola de comando
+    if os.name == 'posix':
+        clearCommandConsole = "clear"
+    elif os.name == 'nt':
+        clearCommandConsole = "cls"
+        
     while flagOp:
-        op = mainMenu()
+        op = mainMenu(clearCommandConsole)
         if op == 1: # Opcion Generar clave publica y privada
-            system("cls")
+            os.system(clearCommandConsole)
             keys(rsa, primeA, primeB)
+            pause = input("presione enter para continuar")
         elif op == 2: # Opcion Cifrado de mensaje y se genera la firma  
-            system("cls")
+            os.system(clearCommandConsole)
             flag = sign(rsa) 
             if flag:
                 print("Firmado")  
             else:
-                print("No Firmado") 
-            system("pause")
+                print("No Firmado")
+            pause = input("presione enter para continuar") 
         elif op == 3: # Opcion Descifrado de Firma 
-            system("cls")
+            os.system(clearCommandConsole)
             flag = check(rsa) 
             if flag:
                 print("Verificado")  
             else:
                 print("No Verificado") 
-            system("pause")
+            pause = input("presione enter para continuar")
         elif op == 0:
             flagOp = False
 
